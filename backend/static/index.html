@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortPass - Next-Gen Logistics & Customs OS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans scroll-smooth">
+
+    <header class="bg-indigo-950 text-white shadow-md py-4 px-8 sticky top-0 z-50 flex justify-between items-center backdrop-blur-md bg-opacity-95">
+        <div class="flex items-center space-x-3">
+            <span class="text-2xl font-bold tracking-wider text-indigo-400">PORT<span class="text-white">PASS</span></span>
+            <span class="bg-indigo-800 text-xs px-2.5 py-1 rounded font-medium border border-indigo-700">Enterprise OS</span>
+        </div>
+        <nav class="hidden md:flex space-x-8 text-sm font-medium text-indigo-200 items-center">
+            <button onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' })" 
+                class="hover:text-white transition cursor-pointer bg-transparent border-0 py-0 px-0 text-sm font-medium">
+                Platform Modules
+            </button>
+            <button onclick="document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' })" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition text-sm font-medium cursor-pointer">
+                Try Live Calculator
+            </button>
+        </nav>
+    </header>
+
+    <section class="bg-gradient-to-b from-indigo-950 to-slate-900 text-white py-20 px-8 text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto space-y-6 relative z-10">
+            <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+                Logistics & Customs Automated
+            </span>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                The Digital Clearinghouse Layer for Global Cross-Border Trade
+            </h1>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto font-medium">
+                Streamline compliance, automate customs duty structures, and manage end-to-end cargo movements on a single unified cloud pipeline.
+            </p>
+            <div class="pt-4 flex justify-center space-x-4">
+                <button onclick="document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' })" 
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-150 transform hover:-translate-y-0.5 cursor-pointer block">
+                    Launch Customs Engine
+                </button>
+                <button onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' })" 
+                    class="border border-slate-600 hover:border-white text-slate-300 hover:text-white font-medium py-3 px-6 rounded-xl transition duration-150 cursor-pointer block">
+                    Explore Enterprise Modules
+                </button>
+            </div>
+        </div> <div class="absolute -bottom-48 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-indigo-500/10 rounded-full blur-3xl"></div>
+    </section>
+
+    <section id="features" class="max-w-5xl mx-auto px-6 py-20">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">One Platform. Total Supply Chain Control.</h2>
+            <p class="text-gray-500 text-sm mt-2">Designed from day one to service multi-port clearance agents, enterprise freight forwarders, and trade compliance teams.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl border-2 border-indigo-600 shadow-sm relative">
+                <span class="absolute -top-3 left-6 bg-indigo-600 text-white font-bold text-[10px] tracking-widest uppercase px-2.5 py-0.5 rounded-full">Active Module</span>
+                <div class="text-3xl mb-4">🧮</div>
+                <h3 class="text-lg font-bold text-slate-800">Customs Tariff Engine</h3>
+                <p class="text-gray-500 text-xs mt-2 leading-relaxed">
+                    Instant micro-second lookups for Indian HSN classifications. Automatically handles cascading sequential taxation matrix models (BCD, SWS, IGST).
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-xs relative opacity-75">
+                <span class="absolute -top-3 left-6 bg-amber-600 text-white font-bold text-[10px] tracking-widest uppercase px-2.5 py-0.5 rounded-full">Next Sprint</span>
+                <div class="text-3xl mb-4">📑</div>
+                <h3 class="text-lg font-bold text-slate-800">Clearance Docs Automation</h3>
+                <p class="text-gray-500 text-xs mt-2 leading-relaxed">
+                    AI-driven processing of Bills of Lading, Commercial Invoices, and Packing Lists to reduce ICEGATE entry rejections by 94%.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-xs relative opacity-75">
+                <span class="absolute -top-3 left-6 bg-amber-600 text-white font-bold text-[10px] tracking-widest uppercase px-2.5 py-0.5 rounded-full">Next Sprint</span>
+                <div class="text-3xl mb-4">🚢</div>
+                <h3 class="text-lg font-bold text-slate-800">Predictive Cargo Tracking</h3>
+                <p class="text-gray-500 text-xs mt-2 leading-relaxed">
+                    Real-time container milestone visibility mapping vessels across global trade corridors with dynamic ocean ETA anomaly alerting.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="border-gray-200 max-w-5xl mx-auto">
+
+    <section id="calculator" class="max-w-5xl mx-auto p-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <section class="bg-white p-6 rounded-xl shadow-xs border border-gray-200 md:col-span-1 h-fit">
+            <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                📊 Calculate Tariff
+            </h2>
+            <form id="calcForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">HSN Code</label>
+                    <input type="text" id="hsnInput" placeholder="e.g. 85171300" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-2xs focus:outline-hidden focus:ring-2 focus:ring-indigo-500 text-sm">
+                    <p class="text-[11px] text-gray-400 mt-1">Try: 85171300 (Phones) or 84713010 (Laptops)</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">Assessable Value (CIF in INR)</label>
+                    <input type="number" id="valueInput" placeholder="e.g. 500000" required min="1"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-2xs focus:outline-hidden focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition duration-150 cursor-pointer text-sm font-bold">
+                    Fetch & Process Rates
+                </button>
+            </form>
+        </section>
+
+        <section class="md:col-span-2 space-y-6">
+            <div id="placeholderState" class="bg-gray-100 border border-dashed border-gray-300 rounded-xl p-12 text-center text-gray-500">
+                <p class="text-base font-medium">Ready for Duty Computation</p>
+                <p class="text-xs text-gray-400 mt-1">Enter an active Indian HSN code and cargo value on the left to pull live calculation structures.</p>
+            </div>
+
+            <div id="errorState" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
+
+            <div id="resultState" class="hidden bg-white rounded-xl shadow-xs border border-gray-200 overflow-hidden">
+                <div class="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Declaration Mapping</h3>
+                        <p id="resDescription" class="text-base font-bold text-gray-800 mt-0.5">—</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-medium text-gray-500 block">HSN Classification</span>
+                        <span id="resHsn" class="inline-block bg-indigo-100 text-indigo-800 font-mono font-bold px-2.5 py-0.5 rounded text-sm mt-1">—</span>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-gray-400 text-xs uppercase font-semibold">
+                                <th class="pb-3 font-medium">Component</th>
+                                <th class="pb-3 text-right font-medium">Rate Base</th>
+                                <th class="pb-3 text-center font-medium">Factor</th>
+                                <th class="pb-3 text-right font-medium">Duty Calculated</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-gray-700 font-medium">
+                            <tr>
+                                <td class="py-3 text-gray-500">Assessable Cargo Value (CIF)</td>
+                                <td class="py-3 text-right" id="valCIF">—</td>
+                                <td class="py-3 text-center text-gray-400">—</td>
+                                <td class="py-3 text-right text-gray-900">—</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">Basic Customs Duty (BCD)</td>
+                                <td class="py-3 text-right" id="valBcdBase">—</td>
+                                <td class="py-3 text-center text-indigo-600 font-mono" id="rateBcd">—</td>
+                                <td class="py-3 text-right text-gray-900" id="valBcdAmt">—</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">Social Welfare Surcharge (SWS)</td>
+                                <td class="py-3 text-right" id="valSwsBase">—</td>
+                                <td class="py-3 text-center text-indigo-600 font-mono">10%</td>
+                                <td class="py-3 text-right text-gray-900" id="valSwsAmt">—</td>
+                            </tr>
+                            <tr class="bg-gray-50/50">
+                                <td class="py-3 text-gray-500 italic">Value Base for IGST</td>
+                                <td class="py-3 text-right font-semibold" id="valIgstBase">—</td>
+                                <td class="py-3 text-center text-gray-400">—</td>
+                                <td class="py-3 text-right text-gray-400">—</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">Integrated GST (IGST)</td>
+                                <td class="py-3 text-right" id="valIgstCalcBase">—</td>
+                                <td class="py-3 text-center text-indigo-600 font-mono" id="rateIgst">—</td>
+                                <td class="py-3 text-right text-gray-900" id="valIgstAmt">—</td>
+                            </tr>
+                            <tr class="border-t border-gray-200 text-base font-bold bg-indigo-50/40 text-indigo-950">
+                                <td class="py-4 px-2">Total Customs Duty Payable</td>
+                                <td colspan="2" class="py-4"></td>
+                                <td class="py-4 text-right px-2 text-indigo-600" id="valTotalDuty">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-medium">Estimated Total Landing Cost:</span>
+                        <span class="text-lg font-black text-gray-900" id="valLandedCost">—</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-xs border-t border-slate-800">
+        &copy; 2026 PortPass Technologies. Designed for Enterprise Supply Chain Logistics.
+    </footer>
+
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
