@@ -10,16 +10,22 @@ from psycopg_pool import ConnectionPool
 from dotenv import load_dotenv
 
 # --- STRICT LOADING: Force .env from root directory ---
+# Since main.py is inside backend/, .parent.parent points to the root 'portpass/' folder
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 env_path = BASE_DIR / ".env"
-load_dotenv(dotenv_path=env_path)
+
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    # Fallback to local execution directory or cloud native environments
+    load_dotenv()
 
 # Retrieve the variable
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # --- CRITICAL: Debugging & Validation ---
 if not DATABASE_URL:
-    raise ValueError(f"CRITICAL ERROR: DATABASE_URL is not set! Check file at: {env_path}")
+    raise ValueError(f"CRITICAL ERROR: DATABASE_URL is not set! Check file at: {env_path} or environment variables.")
 
 print(f"DEBUG: Successfully loaded DATABASE_URL: {DATABASE_URL[:20]}...") 
 
@@ -43,14 +49,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Define clean folder definitions relative to main.py
+CURRENT_DIR = pathlib.Path(__file__).resolve().parent
+STATIC_DIR = CURRENT_DIR / "static"
+
 # --- Serve Frontend Files ---
-# Mounts the 'static' folder located inside 'backend'
-app.mount("/static", StaticFiles(directory=pathlib.Path(__file__).parent / "static"), name="static")
+# Mounts the 'static' folder located directly next to main.py
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 @app.get("/")
 async def read_index():
-    # Points to 'backend/static/index.html'
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "index.html")
+    # Points cleanly to 'backend/static/index.html' at the root domain path
+    return FileResponse(STATIC_DIR / "index.html")
 
 class IndianDutyRequest(BaseModel):
     hsn_code: str
