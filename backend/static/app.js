@@ -1,3 +1,6 @@
+// ==========================================
+// CONTROLLER 1: INDEPENDENT TARIFF CALCULATOR
+// ==========================================
 document.getElementById('calcForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -13,17 +16,16 @@ document.getElementById('calcForm').addEventListener('submit', async (e) => {
     errorCard.classList.add('hidden');
 
     try {
-    // By removing the http://127.0.0.1:8000 part, it works everywhere!
-    const response = await fetch('/api/v1/calculate-indian-duty', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            hsn_code: hsnCode,
-            assessable_value: assessableValue
-        })
-    });
+        const response = await fetch('/api/v1/calculate-indian-duty', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                hsn_code: hsnCode,
+                assessable_value: assessableValue
+            })
+        });
 
         const data = await response.json();
 
@@ -65,3 +67,70 @@ document.getElementById('calcForm').addEventListener('submit', async (e) => {
         errorCard.innerText = err.message;
     }
 });
+
+
+// ==========================================
+// CONTROLLER 2: GLOBAL CARGO TRACKING HUB
+// ==========================================
+async function trackContainer() {
+    const containerNum = document.getElementById('containerInput').value.trim();
+    const resultDiv = document.getElementById('trackingResult');
+    const placeholder = document.getElementById('placeholderState');
+    
+    if (!containerNum) {
+        alert('Please provide a container number to search.');
+        return;
+    }
+
+    try {
+        // Show tracking workspace element, hide empty landing template state
+        resultDiv.classList.remove('hidden');
+        if (placeholder) placeholder.classList.add('hidden');
+        
+        resultDiv.innerHTML = `
+            <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-xl text-sm font-medium animate-pulse">
+                Scanning global infrastructure infrastructure logistics networks...
+            </div>`;
+
+        const response = await fetch('/api/v1/track-container', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ container_number: containerNum })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network tracking endpoint returned an error response.');
+        }
+
+        const data = await response.json();
+        
+        // Inject a visually structured progress dashboard back to the frontend
+        resultDiv.innerHTML = `
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-xs border-l-4 border-l-blue-600">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-slate-900 text-base">Asset ID: ${data.meta.container_number}</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded text-slate-600">${data.meta.source}</span>
+                </div>
+                <hr class="border-gray-100 my-3">
+                
+                <div class="text-sm space-y-2.5 text-slate-700">
+                    <p>🏛️ <strong>ICEGATE Customs:</strong> <span class="text-green-600 font-semibold">${data.customs_milestones.icegate_out_of_charge_ooc}</span></p>
+                    <p>📦 <strong>Bill of Entry Status:</strong> <span class="font-medium text-slate-900">${data.customs_milestones.bill_of_entry_filed}</span></p>
+                    <p>🚢 <strong>Carrier Asset Line:</strong> <span class="font-medium text-slate-900">${data.carrier_milestones.shipping_line || 'Verified Line'}</span></p>
+                    <p>⚓ <strong>ODeX Delivery Order:</strong> <span class="text-blue-600 font-semibold">${data.carrier_milestones.odex_delivery_order_status}</span></p>
+                    
+                    <div class="mt-4 p-3.5 bg-slate-50 border border-gray-100 rounded-lg text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800 block mb-1">Current Operational Status:</strong>
+                        ${data.carrier_milestones.current_status || data.carrier_milestones.status_description}
+                    </div>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error tracking target package:', error);
+        resultDiv.innerHTML = `
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium">
+                Unable to fetch real-time tracking streams. Please try again later.
+            </div>`;
+    }
+}
