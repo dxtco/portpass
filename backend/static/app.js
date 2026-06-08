@@ -1,4 +1,10 @@
 // ==========================================
+// ENGINE GLOBAL REFERENCES
+// ==========================================
+// Keep a global tracking variable here to safely overwrite old map instances
+let liveMapInstance = null;
+
+// ==========================================
 // CONTROLLER 1: INDEPENDENT TARIFF CALCULATOR
 // ==========================================
 document.getElementById('calcForm').addEventListener('submit', async (e) => {
@@ -83,13 +89,20 @@ async function trackContainer() {
     }
 
     try {
-        // Show tracking workspace element, hide empty landing template state
+        // Show tracking workspace grid, hide landing empty template layout
         resultDiv.classList.remove('hidden');
         if (placeholder) placeholder.classList.add('hidden');
         
+        // Setup initial split skeleton views (Loading state)
         resultDiv.innerHTML = `
-            <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-xl text-sm font-medium animate-pulse">
-                Scanning global infrastructure infrastructure logistics networks...
+            <div id="trackingMetrics" class="md:col-span-2">
+                <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-xl text-sm font-medium animate-pulse">
+                    Scanning global infrastructure logistics networks...
+                </div>
+            </div>
+            <div class="md:col-span-3 bg-white p-4 rounded-xl border border-gray-200 shadow-xs flex flex-col min-h-[320px]">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Live AIS Corridor Position Tracking</h4>
+                <div id="mapViewport" class="w-full flex-1 rounded-lg border border-gray-100 bg-slate-50"></div>
             </div>`;
 
         const response = await fetch('/api/v1/track-container', {
@@ -104,32 +117,57 @@ async function trackContainer() {
 
         const data = await response.json();
         
-        // Inject a visually structured progress dashboard back to the frontend
-        resultDiv.innerHTML = `
-            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-xs border-l-4 border-l-blue-600">
+        // 1. Inject real-time structural payload data to the left column metrics block
+        document.getElementById('trackingMetrics').innerHTML = `
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-xs border-l-4 border-l-blue-600 h-full">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="font-bold text-slate-900 text-base">Asset ID: ${data.meta.container_number}</span>
-                    <span class="text-[10px] uppercase font-bold tracking-wider bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded text-slate-600">${data.meta.source}</span>
+                    <span class="font-bold text-slate-900 text-sm">Asset ID: ${data.meta.container_number}</span>
+                    <span class="text-[9px] font-bold bg-slate-100 border border-slate-200 px-2 py-0.5 rounded text-slate-600 uppercase tracking-wide">${data.meta.source}</span>
                 </div>
-                <hr class="border-gray-100 my-3">
+                <hr class="border-gray-100 my-2.5">
                 
-                <div class="text-sm space-y-2.5 text-slate-700">
+                <div class="text-xs space-y-2.5 text-slate-700">
                     <p>🏛️ <strong>ICEGATE Customs:</strong> <span class="text-green-600 font-semibold">${data.customs_milestones.icegate_out_of_charge_ooc}</span></p>
                     <p>📦 <strong>Bill of Entry Status:</strong> <span class="font-medium text-slate-900">${data.customs_milestones.bill_of_entry_filed}</span></p>
                     <p>🚢 <strong>Carrier Asset Line:</strong> <span class="font-medium text-slate-900">${data.carrier_milestones.shipping_line || 'Verified Line'}</span></p>
                     <p>⚓ <strong>ODeX Delivery Order:</strong> <span class="text-blue-600 font-semibold">${data.carrier_milestones.odex_delivery_order_status}</span></p>
                     
-                    <div class="mt-4 p-3.5 bg-slate-50 border border-gray-100 rounded-lg text-xs text-slate-600 leading-relaxed">
-                        <strong class="text-slate-800 block mb-1">Current Operational Status:</strong>
+                    <div class="mt-3 p-3 bg-slate-50 border border-gray-100 rounded-lg text-[11px] text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800 block mb-0.5">Current Operational Status:</strong>
                         ${data.carrier_milestones.current_status || data.carrier_milestones.status_description}
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
+
+        // 2. Real-time Map Initialization Routing
+        // Set fallback mapping pin straight to Nhava Sheva Port, Mumbai coordinates
+        const targetLatitude = 18.9503;
+        const targetLongitude = 72.9520;
+
+        // Reset older Leaflet instances to clean system execution memory
+        if (liveMapInstance) {
+            liveMapInstance.remove();
+            liveMapInstance = null;
+        }
+
+        // Spin up map frame engine directly into the layout viewport panel
+        liveMapInstance = L.map('mapViewport').setView([targetLatitude, targetLongitude], 12);
+
+        // Render OpenStreetMap styling tiles via open delivery CDN network pipelines
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(liveMapInstance);
+
+        // Place pinpoint marker mapping coordinates onto container terminal yard
+        L.marker([targetLatitude, targetLongitude])
+            .addTo(liveMapInstance)
+            .bindPopup(`<b>Container ${data.meta.container_number}</b><br>Yard terminal customs position.`)
+            .openPopup();
+
     } catch (error) {
         console.error('Error tracking target package:', error);
         resultDiv.innerHTML = `
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium">
+            <div class="col-span-5 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium">
                 Unable to fetch real-time tracking streams. Please try again later.
             </div>`;
     }
