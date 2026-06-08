@@ -144,7 +144,15 @@ def track_container(request: TrackRequest):
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT container_number, bill_of_entry_no, shipping_line, current_status, icegate_ooc_status, odex_delivery_order 
+                SELECT 
+                    container_number, 
+                    bill_of_entry_filed, 
+                    shipping_line, 
+                    current_status, 
+                    icegate_out_of_charge_ooc, 
+                    odex_delivery_order_status,
+                    latitude,
+                    longitude
                 FROM tracked_shipments 
                 WHERE container_number = %s;
                 """,
@@ -154,7 +162,12 @@ def track_container(request: TrackRequest):
             
     if not row:
         return {
-            "meta": {"container_number": container_clean, "source": "Simulation Mode (ICEGATE/ODeX Pipeline Connected)"},
+            "meta": {
+                "container_number": container_clean, 
+                "source": "Simulation Mode (ICEGATE/ODeX Pipeline Connected)",
+                "latitude": 18.9503,
+                "longitude": 72.9520
+            },
             "customs_milestones": {
                 "bill_of_entry_filed": "Yes (BE-MOCK-404)",
                 "customs_duty_payment": "Verified (Processed via PortPass Calc)",
@@ -169,7 +182,12 @@ def track_container(request: TrackRequest):
         }
         
     return {
-        "meta": {"container_number": row[0], "source": "Live Production Database"},
+        "meta": {
+            "container_number": row[0], 
+            "source": "Live Production Database",
+            "latitude": float(row[6]) if row[6] is not None else 18.9503,
+            "longitude": float(row[7]) if row[7] is not None else 72.9520
+        },
         "customs_milestones": {
             "bill_of_entry_filed": f"Yes ({row[1]})",
             "customs_duty_payment": "Verified",
