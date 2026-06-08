@@ -89,11 +89,10 @@ async function trackContainer() {
     }
 
     try {
-        // Show tracking workspace grid, hide landing empty template layout
+        // Step 1: Render the complete layout structure immediately so Leaflet has DOM anchors
         resultDiv.classList.remove('hidden');
         if (placeholder) placeholder.classList.add('hidden');
         
-        // Setup initial split skeleton views (Loading state)
         resultDiv.innerHTML = `
             <div id="trackingMetrics" class="md:col-span-2">
                 <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-xl text-sm font-medium animate-pulse">
@@ -102,9 +101,10 @@ async function trackContainer() {
             </div>
             <div class="md:col-span-3 bg-white p-4 rounded-xl border border-gray-200 shadow-xs flex flex-col min-h-[320px]">
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Live AIS Corridor Position Tracking</h4>
-                <div id="mapViewport" class="w-full flex-1 rounded-lg border border-gray-100 bg-slate-50"></div>
+                <div id="mapViewport" class="w-full flex-1 rounded-lg border border-gray-100 bg-slate-100 min-h-[250px]"></div>
             </div>`;
 
+        // Step 2: Await network response payloads
         const response = await fetch('/api/v1/track-container', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -117,7 +117,7 @@ async function trackContainer() {
 
         const data = await response.json();
         
-        // 1. Inject real-time structural payload data to the left column metrics block
+        // Step 3: Swap ONLY the text content in the metrics pane (Don't touch the map container node!)
         document.getElementById('trackingMetrics').innerHTML = `
             <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-xs border-l-4 border-l-blue-600 h-full">
                 <div class="flex justify-between items-center mb-3">
@@ -139,30 +139,34 @@ async function trackContainer() {
                 </div>
             </div>`;
 
-        // 2. Real-time Map Initialization Routing
-        // Set fallback mapping pin straight to Nhava Sheva Port, Mumbai coordinates
-        const targetLatitude = 18.9503;
-        const targetLongitude = 72.9520;
+        // Step 4: Parse Dynamic Map Coordinates
+        const targetLatitude = parseFloat(data.meta.latitude) || 18.9503;
+        const targetLongitude = parseFloat(data.meta.longitude) || 72.9520;
 
-        // Reset older Leaflet instances to clean system execution memory
+        // Reset older Leaflet instances cleanly
         if (liveMapInstance) {
             liveMapInstance.remove();
             liveMapInstance = null;
         }
 
         // Spin up map frame engine directly into the layout viewport panel
-        liveMapInstance = L.map('mapViewport').setView([targetLatitude, targetLongitude], 12);
+        liveMapInstance = L.map('mapViewport').setView([targetLatitude, targetLongitude], 10);
 
-        // Render OpenStreetMap styling tiles via open delivery CDN network pipelines
+        // Render crisp OpenStreetMap styling tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(liveMapInstance);
 
-        // Place pinpoint marker mapping coordinates onto container terminal yard
+        // Place a personalized milestone tracking pin onto the custom coordinates
         L.marker([targetLatitude, targetLongitude])
             .addTo(liveMapInstance)
-            .bindPopup(`<b>Container ${data.meta.container_number}</b><br>Yard terminal customs position.`)
+            .bindPopup(`<b>Container ${data.meta.container_number}</b><br>Status: ${data.carrier_milestones.current_status || 'In Transit'}`)
             .openPopup();
+
+        // Step 5: Force Leaflet to recalculate bounds in case processing skewed elements
+        setTimeout(() => {
+            if (liveMapInstance) liveMapInstance.invalidateSize();
+        }, 200);
 
     } catch (error) {
         console.error('Error tracking target package:', error);
